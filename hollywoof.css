@@ -1,5 +1,6 @@
 body {
     background-color: rgb(176, 164, 164);
+    overflow-y: hidden; 
 }
 
 .answers{

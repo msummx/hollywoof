@@ -1,3 +1,7 @@
+body {
+    background-color: rgb(176, 164, 164);
+}
+
 .answers{
     height: 125px;
     width: 125px;
@@ -7,16 +11,12 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
+    text-align: center;
 }
-#mainlayout  {
-    background-color: black;
-    /* -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover; 
-    background-size: 100% 100%;
-    margin: 0px; */
-    }
+
+#question{
+    text-align: center;
+}
 
 .column {
     /* justify-content: center; */
@@ -33,14 +33,11 @@
     height: 100%;
     /* background-size: contain; */
 }
-#leftcurtain {
-}
 
 #rightcurtain {
     float: right;
 
 }
-
 
 #dogAudiences {
     position: absolute;
@@ -57,10 +54,16 @@
 
 #main {
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: 20%;
+    left: 43%;
     margin-top: -50px;
     margin-left: -50px;
-    width: 100px;
+    width: 300px;
     height: 100px;
 }​
+
+#posters {
+    height: 350px;
+    width: 300px;
+}
+

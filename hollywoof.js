@@ -1,6 +1,6 @@
 require("dotenv").config();
 
-let APICall =`https://api.themoviedb.org/3/discover/movie?api_key=`
+let APICall =`https://api.themoviedb.org/3/discover/movie?api_key=${process.env.TMDB_API}`
 // initalizes an array to store user answers to quiz
 let userAnswers = [];
 let userGenres = [];

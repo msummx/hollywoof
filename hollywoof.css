@@ -1,6 +1,7 @@
 body {
     background-color: rgb(176, 164, 164);
     overflow-y: hidden; 
+    cursor: url(./assets/paw-cursor\ icon.png), auto;
 }
 
 .answers{
@@ -27,7 +28,7 @@ body {
     /* padding: 0px; */
 }
 .curtains {
-    width: auto;
+    width: 30%;
     max-width: 100%;
     max-height: 100%;
     display: flex;
@@ -55,16 +56,21 @@ body {
 
 #main {
     position: absolute;
-    top: 20%;
-    left: 43%;
-    margin-top: -50px;
-    margin-left: -50px;
-    width: 300px;
-    height: 100px;
+    top: 25%;
+    left: 25%;
+    /* margin-right: auto;
+    margin-left: auto; */
+    width: 50%;
+    height: 50%;
 }​
 
+#postercard {
+    height: 40%;
+    width: 30%;
+}
 #posters {
     height: 350px;
     width: 300px;
 }
+
 

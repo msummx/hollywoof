@@ -1,3 +1,13 @@
+.answers{
+    height: 125px;
+    width: 125px;
+}
+
+#answerdiv{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
 #mainlayout  {
     background-color: black;
     /* -webkit-background-size: cover;

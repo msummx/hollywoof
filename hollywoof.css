@@ -1,6 +1,7 @@
 body {
     background-color: rgb(176, 164, 164);
-    overflow-y: hidden; 
+    /* overflow-y: hidden;  */
+    cursor: url(./assets/paw-cursor\ icon.png), auto;
 }
 
 .answers{
@@ -20,19 +21,16 @@ body {
 }
 
 .column {
-    /* justify-content: center; */
-    /* position: relative; */
     float: left;
     width: 50%;
-    /* padding: 0px; */
+
 }
 .curtains {
-    width: auto;
+    width: 30%;
     max-width: 100%;
     max-height: 100%;
     display: flex;
     height: 100%;
-    /* background-size: contain; */
 }
 
 #rightcurtain {
@@ -41,30 +39,34 @@ body {
 }
 
 #dogAudiences {
-    position: absolute;
-    /* margin-left: auto;
-    margin-right: auto; */
+    position: fixed;
     left: 0;
     bottom: 0;
     display: block;
     text-align: center;
-    width:100%;
-    /* -webkit-filter: blur(2px);
-    filter: blur(2px) */
+    width: 100%;
 }
 
 #main {
     position: absolute;
-    top: 20%;
-    left: 43%;
-    margin-top: -50px;
-    margin-left: -50px;
-    width: 300px;
-    height: 100px;
+    top: 15%;
+    left: 15%;
+    width: 70%;
+    height: 70%;
 }​
 
+#postercard {
+    height: 40%;
+    width: 30%;
+}
 #posters {
     height: 350px;
     width: 300px;
+}
+
+#previousNext {
+    position: static;
+    float: right;
+    bottom: 30%;
 }
 

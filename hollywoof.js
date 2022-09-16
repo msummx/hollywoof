@@ -1,22 +1,9 @@
-
-// require("dotenv").config();
-
-let APICall =`https://api.themoviedb.org/3/discover/movie?api_key=${TMDB_API}`
-
-//require("dotenv").config();
-
-//    http://www.omdbapi.com/?apikey=[yourkey]&
-let detailsAPICall = "http://www.omdbapi.com/?apikey="
-const TMDB_api_key = '------'
-const OMDb_api_Key = '----'
-let movieData
-let displayNumber = 0
-let APICall =`https://api.themoviedb.org/3/discover/`
-let APICall =`https://api.themoviedb.org/3/discover/movie?api_key=${process.env.TMDB_API}`
-
+let APICall =`https://api.themoviedb.org/3/discover/movie?api_key=b332e1524f2736dabcb7c80b39ae8146`
+//let Apicall2`https://api.themoviedb.org/3/discover/`
 // initalizes an array to store user answers to quiz
 let userAnswers = [];
 let userGenres = [];
+let movieData
 //creates object to store userQuestions and answer sets for each part of the quiz
 let userQuestions = {
     1: {
@@ -51,11 +38,11 @@ genres.set(`ActionAndAdventure`, `10759`);
 // Displays the current quiz question and answer set by taking in the question number
 let displayQuiz = (num) => {
     //Gets object for current question
-    currentQuestion = userQuestions[num]
+    let currentQuestion = userQuestions[num]
     //Displays question to user
     document.getElementById('question').innerHTML = `<h2>${currentQuestion.question}</h2>`
     //Loops through length of answers, accessing divs and inputting answer pictures and descriptions
-    for (i = 0; i < currentQuestion.answers.length; i++) {
+    for (let i = 0; i < currentQuestion.answers.length; i++) {
         document.getElementById(`ans${i}`).innerHTML = `<img class="img-thumbnail" class="answers" onClick="getAnswer(${num}, ${i})" src="assets/q${num}a${i+1}.png"></img>
         <p>${currentQuestion.answers[i]}</p>`
     }
@@ -94,15 +81,12 @@ let checkMovie = (userAnswers) => {
     }
 }
 function addMovieOrTV(){
-    if(userAnswers[0]==`Movie`){return `movie?`}
-    else{return `tv?`}
+    if(userAnswers[0]==`Movie`){return `movie?movie?api_key=b332e1524f2736dabcb7c80b39ae8146`}
+    else{return `tv?movie?api_key=b332e1524f2736dabcb7c80b39ae8146`}
 }
 
 function language(){
     return `&with_original_language=en`
-}
-function addAPIKey(){
-    return`api_key=${TMDB_api_key}`
 }
 
 let addLength = (userAnswers) => {
@@ -176,7 +160,7 @@ let addGenres = (userGenres) => {
 let assembleURL = (userAnswers) => {
     console.log("this is userAnswers:"+userAnswers)
     movie = checkMovie(userAnswers)
-    APICall = APICall + addMovieOrTV(movie)+addAPIKey()+language() + addLength(userAnswers) + addRelease(userAnswers) + addGenres(getGenres(userAnswers, movie))
+    APICall = APICall +language() + addLength(userAnswers) + addRelease(userAnswers) + addGenres(getGenres(userAnswers, movie))
     getMovies(APICall)
 }
 
@@ -189,10 +173,21 @@ let getMovies = (APICall) => {
     })
     .then(data => {
         console.log(data)
-        displayRecommendation(data, displayNumber)
         movieData = data
-        creatingApiForOMDB(movieData)
+        displayRecommendation(data, 0)
     })
+}
+
+let getReleaseYear = (data, i) => {
+    let year = ``
+    array = data.results[i].release_date.split('')
+    for (let i = 0; i < array.length; i++) {
+        if (array[i] == '-'){
+            break
+        }
+        year = year + array[i]
+    }
+    return year
 }
 
 let displayRecommendation = (data, i) => {
@@ -206,29 +201,22 @@ let displayRecommendation = (data, i) => {
     </div>
     <div class="col-md-8">
         <h3 id="movietitle">
-            Add Movie Title</h3>
-        <span id="releasedYear" class="badge badge-info">2020</span><span id="movieRating"
+            ${data.results[i].title}</h3>
+        <span id="releasedYear" class="badge badge-info">${getReleaseYear(data, i)}</span><span id="movieRating"
             class="badge badge-info">PG-13</span><span id="movieGenre1"
             class="badge badge-pill badge-light">Comedy</span><span id="movieRuntime"
             class="badge badge-pill badge-light">Runtime:</span>
         <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget sapien sapien. Curabitur in
-            metus urna. In hac habitasse platea dictumst.
-            Phasellus eu sem sapien, sed vestibulum velit. Nam purus nibh, lacinia non faucibus et, pharetra in
-            dolor. Sed iaculis posuere diam ut cursus.
-            Morbi commodo sodales nisi id sodales. Proin consectetur, nisi id commodo imperdiet, metus nunc
-            consequat lectus, id bibendum diam velit et dui.
-            Proin massa magna, vulputate nec bibendum nec, posuere nec lacus. Aliquam mi erat, aliquam vel
-            luctus eu, pharetra quis elit. Nulla euismod ultrices
-            massa, et feugiat ipsum consequat eu.
+            ${data.results[i].overview}
         </p>
+        <button onclick="nextButton(i)">Click me</button>
         <div id="previousNext" class="btn-group" role="group">
-            <button id="previousMovie" class="btn btn-secondary" type="button">
+            <button id="previousMovie" class="btn btn-secondary" onClick="previousButton(i)">
                 Previous
             </button>
-            <button id="nextMovie" class="btn btn-secondary" type="button">
+            <button id="nextMovie" class="btn btn-secondary" onClick="nextButton(i)">
                 Next
-            </button>
+            </button>      
         </div>
     </div>
 </div>`
@@ -238,17 +226,16 @@ let displayRecommendation = (data, i) => {
 
 // }
 
-    document.getElementById('question').innerHTML = `<h2>${data.results[i].title}</h2>`
-    document.getElementById('movieDescription').innerHTML = `<h2>${data.results[i].overview}</h2>`
-    document.getElementById('answerdiv').innerHTML = `<img style="width:300px; height:350px;" src='https://image.tmdb.org/t/p/original${data.results[i].poster_path}'>`
+function nextButton(i) {
+    i++
+    displayRecommendation(movieData, i)
 }
-
-function nextButton() {
-    displayNumber++
-    displayRecommendation(movieData, displayNumber)
-    console.log("testing")
+function previousButton(i) {
+    if(i <=0){return}
+    else{  i--
+        displayRecommendation(movieData, i)
+    }
 }
-
 
 //    will fix in the morning this will display new api data
 // function creatingApiForOMDB(movieData){

@@ -1,6 +1,5 @@
 //require("dotenv").config();
 
-
 //    http://www.omdbapi.com/?apikey=[yourkey]&
 let detailsAPICall = "http://www.omdbapi.com/?apikey="
 const TMDB_api_key = '------'
@@ -8,6 +7,7 @@ const OMDb_api_Key = '----'
 let movieData
 let displayNumber = 0
 let APICall =`https://api.themoviedb.org/3/discover/`
+let APICall =`https://api.themoviedb.org/3/discover/movie?api_key=${process.env.TMDB_API}`
 // initalizes an array to store user answers to quiz
 let userAnswers = [];
 let userGenres = [];

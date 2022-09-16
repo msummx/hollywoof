@@ -1,6 +1,19 @@
+
 // require("dotenv").config();
 
 let APICall =`https://api.themoviedb.org/3/discover/movie?api_key=${TMDB_API}`
+
+//require("dotenv").config();
+
+//    http://www.omdbapi.com/?apikey=[yourkey]&
+let detailsAPICall = "http://www.omdbapi.com/?apikey="
+const TMDB_api_key = '------'
+const OMDb_api_Key = '----'
+let movieData
+let displayNumber = 0
+let APICall =`https://api.themoviedb.org/3/discover/`
+let APICall =`https://api.themoviedb.org/3/discover/movie?api_key=${process.env.TMDB_API}`
+
 // initalizes an array to store user answers to quiz
 let userAnswers = [];
 let userGenres = [];
@@ -32,6 +45,8 @@ genres.set(`Comedy`, `35`);
 genres.set(`Horror`, `27`);
 genres.set(`Adventure`, `12`);
 genres.set(`Documentary`, `99`);
+genres.set(`Mystery`, `9648`);
+genres.set(`ActionAndAdventure`, `10759`);
 
 // Displays the current quiz question and answer set by taking in the question number
 let displayQuiz = (num) => {
@@ -74,7 +89,20 @@ let getAnswer = (q, a) => {
 displayQuiz(1);
 
 let checkMovie = (userAnswers) => {
-    if (userAnswers[0] == `Movie`){return true} 
+    if (userAnswers[0] == `Movie`){
+        return true
+    }
+}
+function addMovieOrTV(){
+    if(userAnswers[0]==`Movie`){return `movie?`}
+    else{return `tv?`}
+}
+
+function language(){
+    return `&with_original_language=en`
+}
+function addAPIKey(){
+    return`api_key=${TMDB_api_key}`
 }
 
 let addLength = (userAnswers) => {
@@ -88,6 +116,7 @@ let addRelease = (userAnswers) => {
 }
 
 let getGenres = (userAnswers, movie) => {
+    console.log("this is movie:"+movie)
     if (movie) {
         switch (userAnswers[3]) {
             case `Laughter`:
@@ -110,19 +139,19 @@ let getGenres = (userAnswers, movie) => {
     else {
         switch (userAnswers[3]) {
             case `Laughter`:
-                userGenres = [];
+                userGenres = [`Comedy`];
                 break;
             case `Tears`:
-                userGenres = [];
+                userGenres = [`Drama`];
                 break;
             case `Frights`:
-                userGenres = [];
+                userGenres = [`Mystery`];      //Mystery    9648 TV does Not have horror :(
                 break;
             case `Adventures`:
-                userGenres = [];
+                userGenres = [`ActionAndAdventure`];
                 break;
             case `New Ideas`:
-                userGenres = [];
+                userGenres = [`Documentary`];
                 break;
         }
     }
@@ -130,25 +159,29 @@ let getGenres = (userAnswers, movie) => {
 }
 
 let addGenres = (userGenres) => {
+    console.log("this is userGenres"+userGenres)
     let genreURL = '';
     for (i = 0; i < userGenres.length; i++)
         if (i == 0) {
-            genreURL = `&with_genres=${genres[userGenres[i]]}`
+            genreURL = `&with_genres=${genres.get(userGenres[i])}`   
+            console.log(genreURL)
         }
         else {
-            genreURL = genreURL + `,${genres[userGenres[i]]}`
+            genreURL = genreURL + `,${genres.get(userGenres[i])}`    
+            console.log(genreURL)
         }
         return genreURL
 }
 
 let assembleURL = (userAnswers) => {
+    console.log("this is userAnswers:"+userAnswers)
     movie = checkMovie(userAnswers)
-    APICall = APICall + addLength(userAnswers) + addRelease(userAnswers) + addGenres(getGenres(userAnswers, movie))
+    APICall = APICall + addMovieOrTV(movie)+addAPIKey()+language() + addLength(userAnswers) + addRelease(userAnswers) + addGenres(getGenres(userAnswers, movie))
     getMovies(APICall)
 }
 
 let getMovies = (APICall) => {
-    let i = 0
+    console.log(APICall)
     fetch(APICall)
     .then(response => {
         let movies = response.json()
@@ -156,11 +189,14 @@ let getMovies = (APICall) => {
     })
     .then(data => {
         console.log(data)
-        displayRecommendation(data, i)
+        displayRecommendation(data, displayNumber)
+        movieData = data
+        creatingApiForOMDB(movieData)
     })
 }
 
 let displayRecommendation = (data, i) => {
+
     document.getElementById('question').innerHTML = ``
     document.getElementById('answerdiv').innerHTML = ``
     document.getElementById(`main`).innerHTML = `<div class="row">
@@ -201,3 +237,43 @@ let displayRecommendation = (data, i) => {
 //     let finish = daysjs().add(data.results[i].runtime, 'minute')
 
 // }
+
+    document.getElementById('question').innerHTML = `<h2>${data.results[i].title}</h2>`
+    document.getElementById('movieDescription').innerHTML = `<h2>${data.results[i].overview}</h2>`
+    document.getElementById('answerdiv').innerHTML = `<img style="width:300px; height:350px;" src='https://image.tmdb.org/t/p/original${data.results[i].poster_path}'>`
+}
+
+function nextButton() {
+    displayNumber++
+    displayRecommendation(movieData, displayNumber)
+    console.log("testing")
+}
+
+
+//    will fix in the morning this will display new api data
+// function creatingApiForOMDB(movieData){
+//     currentMovieTitle = movieData.results[i].title
+//     detailsAPICall += OMDb_api_Key+"&"+currentMovieTitle
+//     getMoviesDetails(detailsAPICall)
+// }
+
+// let getMoviesDetails = (detailsAPICall) => {
+//     fetch(detailsAPICall)
+//     .then(response => {
+//         console.log(response.json())
+//         //let movies = response.json()
+//         return movies
+//     })
+//     .then(data => {
+//         console.log(data)
+//         movieData = data
+//     })
+// }
+
+//TODO fix genres -Done
+//TODO fix language -Done
+//TODO made movie display cycle -Done
+//TODO add TV Shows feature -Done
+//TODO add second api to pull rotton tomato score
+
+

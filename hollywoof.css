@@ -13,6 +13,7 @@ body {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
+    align-items: center;
     text-align: center;
 }
 
@@ -70,3 +71,15 @@ body {
     bottom: 30%;
 }
 
+#answerdiv .img-thumbnail {
+    height: 125px;
+    width: 125px;
+}
+
+#qanda {
+    position: absolute;
+    top: 15%;
+    left: 15%;
+    width: 70%;
+    height: 70%;
+}

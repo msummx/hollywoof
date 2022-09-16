@@ -1,0 +1,27 @@
+{
+  "name": "hollywoof",
+  "version": "1.0.0",
+  "description": "",
+  "main": "hollywoof.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/msummx/hollywoof.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/msummx/hollywoof/issues"
+  },
+  "homepage": "https://github.com/msummx/hollywoof#readme",
+  "dependencies": {
+    "browserify": "^17.0.0",
+    "dayjs": "^1.11.5",
+    "dotenv": "^16.0.2",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0"
+  }
+}

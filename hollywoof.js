@@ -1,3 +1,8 @@
+
+// require("dotenv").config();
+
+let APICall =`https://api.themoviedb.org/3/discover/movie?api_key=${TMDB_API}`
+
 //require("dotenv").config();
 
 //    http://www.omdbapi.com/?apikey=[yourkey]&
@@ -8,6 +13,7 @@ let movieData
 let displayNumber = 0
 let APICall =`https://api.themoviedb.org/3/discover/`
 let APICall =`https://api.themoviedb.org/3/discover/movie?api_key=${process.env.TMDB_API}`
+
 // initalizes an array to store user answers to quiz
 let userAnswers = [];
 let userGenres = [];
@@ -50,7 +56,7 @@ let displayQuiz = (num) => {
     document.getElementById('question').innerHTML = `<h2>${currentQuestion.question}</h2>`
     //Loops through length of answers, accessing divs and inputting answer pictures and descriptions
     for (i = 0; i < currentQuestion.answers.length; i++) {
-        document.getElementById(`ans${i}`).innerHTML = `<img class="answers" onClick="getAnswer(${num}, ${i})" src="assets/q${num}a${i+1}.png"></img>
+        document.getElementById(`ans${i}`).innerHTML = `<img class="img-thumbnail" class="answers" onClick="getAnswer(${num}, ${i})" src="assets/q${num}a${i+1}.png"></img>
         <p>${currentQuestion.answers[i]}</p>`
     }
 }
@@ -60,7 +66,21 @@ let getAnswer = (q, a) => {
     //grabs answer and pushes it to userAnswers array
     userAnswers.push(userQuestions[q].answers[a]);
     //if there's another question to be called, calls it.
-    if (q < Object.keys(userQuestions).length){displayQuiz(q + 1)}
+    if (q < Object.keys(userQuestions).length){
+        if (q == Object.keys(userQuestions).length - 1){
+            document.getElementById(`answerdiv`).innerHTML = `<div id="ans0">
+            </div>
+            <div id="ans1">
+            </div>
+            <div id="ans2">
+            </div>
+            <div id="ans3">
+            </div>
+            <div id="ans4">
+            </div>`
+        }
+        displayQuiz(q + 1)
+    }
     //once there are no more userQuestions, call the function to generate recommendations and display to user.
     else if (q == Object.keys(userQuestions).length){assembleURL(userAnswers)}
 }
@@ -176,6 +196,48 @@ let getMovies = (APICall) => {
 }
 
 let displayRecommendation = (data, i) => {
+
+    document.getElementById('question').innerHTML = ``
+    document.getElementById('answerdiv').innerHTML = ``
+    document.getElementById(`main`).innerHTML = `<div class="row">
+    <div id="postercard" class="col-md-3">
+        <img id="poster" alt="movieposter" src="https://m.media-amazon.com/images/I/71niXI3lxlL._AC_SY679_.jpg"
+            class="img-thumbnail" />
+    </div>
+    <div class="col-md-8">
+        <h3 id="movietitle">
+            Add Movie Title</h3>
+        <span id="releasedYear" class="badge badge-info">2020</span><span id="movieRating"
+            class="badge badge-info">PG-13</span><span id="movieGenre1"
+            class="badge badge-pill badge-light">Comedy</span><span id="movieRuntime"
+            class="badge badge-pill badge-light">Runtime:</span>
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eget sapien sapien. Curabitur in
+            metus urna. In hac habitasse platea dictumst.
+            Phasellus eu sem sapien, sed vestibulum velit. Nam purus nibh, lacinia non faucibus et, pharetra in
+            dolor. Sed iaculis posuere diam ut cursus.
+            Morbi commodo sodales nisi id sodales. Proin consectetur, nisi id commodo imperdiet, metus nunc
+            consequat lectus, id bibendum diam velit et dui.
+            Proin massa magna, vulputate nec bibendum nec, posuere nec lacus. Aliquam mi erat, aliquam vel
+            luctus eu, pharetra quis elit. Nulla euismod ultrices
+            massa, et feugiat ipsum consequat eu.
+        </p>
+        <div id="previousNext" class="btn-group" role="group">
+            <button id="previousMovie" class="btn btn-secondary" type="button">
+                Previous
+            </button>
+            <button id="nextMovie" class="btn btn-secondary" type="button">
+                Next
+            </button>
+        </div>
+    </div>
+</div>`
+}
+// let getFinishTime = (data, i) => {
+//     let finish = daysjs().add(data.results[i].runtime, 'minute')
+
+// }
+
     document.getElementById('question').innerHTML = `<h2>${data.results[i].title}</h2>`
     document.getElementById('movieDescription').innerHTML = `<h2>${data.results[i].overview}</h2>`
     document.getElementById('answerdiv').innerHTML = `<img style="width:300px; height:350px;" src='https://image.tmdb.org/t/p/original${data.results[i].poster_path}'>`
@@ -213,4 +275,5 @@ function nextButton() {
 //TODO made movie display cycle -Done
 //TODO add TV Shows feature -Done
 //TODO add second api to pull rotton tomato score
+
 

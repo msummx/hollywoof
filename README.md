@@ -27,5 +27,8 @@ Explore this project [here](https://hollywoof.netlify.app/ "here")
 
 ## Creators
 - Wes Fountain
+![wes](assets/wes.png)
 - Matt Summers
+![matt](assets/matt.jpeg)
 - Khanh Trinh
+![khanh](assets/khanh.jpg)

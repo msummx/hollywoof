@@ -1,8 +1,13 @@
+@font-face {
+    font-family: 'mainfont';
+    src: url(./assets/fonts/FontypeAnimalPet-BWAAx.ttf);
+}
+
 body {
     background-color: rgb(176, 164, 164);
     /* overflow-y: hidden;  */
     cursor: url(./assets/paw-cursor\ icon.png), auto;
-    font-family: 'Kumbh Sans', serif;
+    font-family: 'mainfont', serif;
 }
 
 .answers{

@@ -82,3 +82,13 @@ body {
     width: 70%;
     height: 70%;
 }
+
+#dogPic {
+    height: 250px;
+    width: 250px;
+}
+
+#dogDiv{
+    display: flex;
+    justify-content: center;
+}

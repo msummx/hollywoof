@@ -190,77 +190,44 @@ let getReleaseYear = (data, i) => {
     return year
 }
 
-let displayRecommendation = (data, i) => {
-
+let displayRecommendation = (data, index) => {
     document.getElementById('question').innerHTML = ``
     document.getElementById('answerdiv').innerHTML = ``
     document.getElementById(`main`).innerHTML = `<div class="row">
     <div id="postercard" class="col-md-3">
-        <img id="poster" alt="movieposter" src="https://m.media-amazon.com/images/I/71niXI3lxlL._AC_SY679_.jpg"
+        <img id="poster" alt="movieposter" src="https://www.themoviedb.org/t/p/w1280${data.results[index].poster_path}"
             class="img-thumbnail" />
     </div>
     <div class="col-md-8">
         <h3 id="movietitle">
-            ${data.results[i].title}</h3>
-        <span id="releasedYear" class="badge badge-info">${getReleaseYear(data, i)}</span><span id="movieRating"
+            ${data.results[index].title}</h3>
+        <span id="releasedYear" class="badge badge-info">${getReleaseYear(data, index)}</span><span id="movieRating"
             class="badge badge-info">PG-13</span><span id="movieGenre1"
             class="badge badge-pill badge-light">Comedy</span><span id="movieRuntime"
             class="badge badge-pill badge-light">Runtime:</span>
         <p>
-            ${data.results[i].overview}
+            ${data.results[index].overview}
         </p>
         <button onclick="nextButton(i)">Click me</button>
         <div id="previousNext" class="btn-group" role="group">
-            <button id="previousMovie" class="btn btn-secondary" onClick="previousButton(i)">
+            <button id="previousMovie" class="btn btn-secondary" onClick="previousButton(data, index)">
                 Previous
             </button>
-            <button id="nextMovie" class="btn btn-secondary" onClick="nextButton(i)">
+            <button id="nextMovie" class="btn btn-secondary" onClick="nextButton(${data}, ${index})" type="button">
                 Next
             </button>      
         </div>
-    </div>
-</div>`
+    </div>`
 }
-// let getFinishTime = (data, i) => {
-//     let finish = daysjs().add(data.results[i].runtime, 'minute')
 
-// }
-
-function nextButton(i) {
-    i++
-    displayRecommendation(movieData, i)
+function nextButton(data, index) {
+    console.log(index)
+    index++
+    console.log(index)
+    displayRecommendation(data, index)
 }
-function previousButton(i) {
-    if(i <=0){return}
-    else{  i--
-        displayRecommendation(movieData, i)
+function previousButton(data, index) {
+    if(index <=0){return}
+    else{  index--
     }
 }
-
-//    will fix in the morning this will display new api data
-// function creatingApiForOMDB(movieData){
-//     currentMovieTitle = movieData.results[i].title
-//     detailsAPICall += OMDb_api_Key+"&"+currentMovieTitle
-//     getMoviesDetails(detailsAPICall)
-// }
-
-// let getMoviesDetails = (detailsAPICall) => {
-//     fetch(detailsAPICall)
-//     .then(response => {
-//         console.log(response.json())
-//         //let movies = response.json()
-//         return movies
-//     })
-//     .then(data => {
-//         console.log(data)
-//         movieData = data
-//     })
-// }
-
-//TODO fix genres -Done
-//TODO fix language -Done
-//TODO made movie display cycle -Done
-//TODO add TV Shows feature -Done
-//TODO add second api to pull rotton tomato score
-
-

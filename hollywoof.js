@@ -1,8 +1,11 @@
+//initializes base urls for API calls
 let APICall =`https://api.themoviedb.org/3/discover/movie?api_key=b332e1524f2736dabcb7c80b39ae8146`
 let DogAPI = `https://dog.ceo/api/breeds/image/random`
 // initalizes an array to store user answers to quiz
 let userAnswers = [];
+// initializes an array to store genres from user answers
 let userGenres = [];
+//sets an empty string to contain dogpic url
 let dogPic = ``;
 //creates object to store userQuestions and answer sets for each part of the quiz
 let userQuestions = {
@@ -20,6 +23,7 @@ let userQuestions = {
     },
 }
 
+//creates a map to equate genres with their ids for API call
 let genres = new Map();
 genres.set(`Drama`, `18`);
 genres.set(`Action`, `28`);
@@ -69,20 +73,24 @@ let getAnswer = (q, a) => {
 // initializes default to first question
 displayQuiz(1);
 
+// adds language to API
 function language(){
     return `&with_original_language=en`
 }
 
+// filters shorter movies for people without a lot of time
 let addLength = (userAnswers) => {
     if (userAnswers[0] == `Not a lot`){return '&with_runtime.lte=120'}
     else{return ``}
 }
 
+//sets window for release dates
 let addRelease = (userAnswers) => {
     if (userAnswers[1] == `Classic`) {return '&primary_release_date.gte='+1980+'&primary_release_date.lte='+2006}
     else {return '&primary_release_date.gte='+2006+'&primary_release_date.lte='+2022}
 }
 
+//converts user input to genre lists
 let getGenres = (userAnswers) => {
         switch (userAnswers[2]) {
             case `Laughter`:
@@ -104,6 +112,7 @@ let getGenres = (userAnswers) => {
     return userGenres
 }
 
+// adds genres to API  call
 let addGenres = (userGenres) => {
     console.log("this is userGenres"+userGenres)
     let genreURL = '';
@@ -119,19 +128,23 @@ let addGenres = (userGenres) => {
         return genreURL
 }
 
+//assembles the URL for API call using above functions
 let assembleURL = (userAnswers) => {
     console.log("this is userAnswers:"+userAnswers)
     APICall = APICall +language() + addLength(userAnswers) + addRelease(userAnswers) + addGenres(getGenres(userAnswers))
     getMovies(APICall)
 }
 
+//calls the API to get a list of movies with required specifications
 let getMovies = (APICall) => {
     console.log(APICall)
     fetch(APICall)
+    //converts to JSON
     .then(response => {
         let movies = response.json()
         return movies
     })
+    //uses JSON to choose a random movie from list and display
     .then(data => {
         console.log(data)
         movieData = data
@@ -140,6 +153,7 @@ let getMovies = (APICall) => {
     })
 }
 
+//takes in release date from API object and returns just the year
 let getReleaseYear = (data, i) => {
     let year = ``
     array = data.results[i].release_date.split('')
@@ -152,6 +166,7 @@ let getReleaseYear = (data, i) => {
     return year
 }
 
+//sets up function to generate random dog picture
 let getDog = (DogAPI) => {
     fetch(DogAPI)
     .then(response => {
@@ -164,8 +179,10 @@ let getDog = (DogAPI) => {
     })
 }
 
+//calls the getDog function to save dogPic url
 getDog(DogAPI)
 
+//changes innerHTML of page to load the display screen. Uses variables to display movie info and displays a random dog image for fun.
 let displayRecommendation = (data, index) => {
     document.getElementById('question').innerHTML = ``
     document.getElementById('answerdiv').innerHTML = ``

@@ -1,24 +1,20 @@
 let APICall =`https://api.themoviedb.org/3/discover/movie?api_key=b332e1524f2736dabcb7c80b39ae8146`
-//let Apicall2`https://api.themoviedb.org/3/discover/`
+let DogAPI = `https://dog.ceo/api/breeds/image/random`
 // initalizes an array to store user answers to quiz
 let userAnswers = [];
 let userGenres = [];
-let movieData
+let dogPic = ``;
 //creates object to store userQuestions and answer sets for each part of the quiz
 let userQuestions = {
     1: {
-        question : `Are you looking for a movie or TV series?`,
-        answers : [`Movie`, `TV Series`]
-    },
-    2: {
         question : `How much time do you have?`,
         answers : [`Not a lot`, `Too much`]
     },
-    3: {
+    2: {
         question : `Something old or something new?`,
         answers : [`Classic`, `Modern`]
     },
-    4: {
+    3: {
         question : `What are you in the mood for?`,
         answers : [`Laughter`, `Tears`, `Frights`, `Adventures`, `New Ideas`]
     },
@@ -32,8 +28,6 @@ genres.set(`Comedy`, `35`);
 genres.set(`Horror`, `27`);
 genres.set(`Adventure`, `12`);
 genres.set(`Documentary`, `99`);
-genres.set(`Mystery`, `9648`);
-genres.set(`ActionAndAdventure`, `10759`);
 
 // Displays the current quiz question and answer set by taking in the question number
 let displayQuiz = (num) => {
@@ -43,7 +37,7 @@ let displayQuiz = (num) => {
     document.getElementById('question').innerHTML = `<h2>${currentQuestion.question}</h2>`
     //Loops through length of answers, accessing divs and inputting answer pictures and descriptions
     for (let i = 0; i < currentQuestion.answers.length; i++) {
-        document.getElementById(`ans${i}`).innerHTML = `<img class="img-thumbnail" class="answers" onClick="getAnswer(${num}, ${i})" src="assets/q${num}a${i+1}.png"></img>
+        document.getElementById(`ans${i}`).innerHTML = `<img class="img-thumbnail" class="answers" onClick="getAnswer(${num}, ${i})" src="assets/q${num + 1}a${i+1}.png"></img>
         <p>${currentQuestion.answers[i]}</p>`
     }
 }
@@ -75,34 +69,22 @@ let getAnswer = (q, a) => {
 // initializes default to first question
 displayQuiz(1);
 
-let checkMovie = (userAnswers) => {
-    if (userAnswers[0] == `Movie`){
-        return true
-    }
-}
-function addMovieOrTV(){
-    if(userAnswers[0]==`Movie`){return `movie?movie?api_key=b332e1524f2736dabcb7c80b39ae8146`}
-    else{return `tv?movie?api_key=b332e1524f2736dabcb7c80b39ae8146`}
-}
-
 function language(){
     return `&with_original_language=en`
 }
 
 let addLength = (userAnswers) => {
-    if (userAnswers[1] == `Not a lot`){return '&with_runtime.lte=120'}
+    if (userAnswers[0] == `Not a lot`){return '&with_runtime.lte=120'}
     else{return ``}
 }
 
 let addRelease = (userAnswers) => {
-    if (userAnswers[2] == `Classic`) {return '&primary_release_date.gte='+1980+'&primary_release_date.lte='+2006}
+    if (userAnswers[1] == `Classic`) {return '&primary_release_date.gte='+1980+'&primary_release_date.lte='+2006}
     else {return '&primary_release_date.gte='+2006+'&primary_release_date.lte='+2022}
 }
 
-let getGenres = (userAnswers, movie) => {
-    console.log("this is movie:"+movie)
-    if (movie) {
-        switch (userAnswers[3]) {
+let getGenres = (userAnswers) => {
+        switch (userAnswers[2]) {
             case `Laughter`:
                 userGenres = [`Comedy`];
                 break;
@@ -119,26 +101,6 @@ let getGenres = (userAnswers, movie) => {
                 userGenres = [`Documentary`];
                 break;
         }
-    }
-    else {
-        switch (userAnswers[3]) {
-            case `Laughter`:
-                userGenres = [`Comedy`];
-                break;
-            case `Tears`:
-                userGenres = [`Drama`];
-                break;
-            case `Frights`:
-                userGenres = [`Mystery`];      //Mystery    9648 TV does Not have horror :(
-                break;
-            case `Adventures`:
-                userGenres = [`ActionAndAdventure`];
-                break;
-            case `New Ideas`:
-                userGenres = [`Documentary`];
-                break;
-        }
-    }
     return userGenres
 }
 
@@ -159,8 +121,7 @@ let addGenres = (userGenres) => {
 
 let assembleURL = (userAnswers) => {
     console.log("this is userAnswers:"+userAnswers)
-    movie = checkMovie(userAnswers)
-    APICall = APICall +language() + addLength(userAnswers) + addRelease(userAnswers) + addGenres(getGenres(userAnswers, movie))
+    APICall = APICall +language() + addLength(userAnswers) + addRelease(userAnswers) + addGenres(getGenres(userAnswers))
     getMovies(APICall)
 }
 
@@ -174,7 +135,8 @@ let getMovies = (APICall) => {
     .then(data => {
         console.log(data)
         movieData = data
-        displayRecommendation(data, 0)
+        index = Math.floor(Math.random() * 20)
+        displayRecommendation(movieData, index)
     })
 }
 
@@ -190,6 +152,20 @@ let getReleaseYear = (data, i) => {
     return year
 }
 
+let getDog = (DogAPI) => {
+    fetch(DogAPI)
+    .then(response => {
+        let dogs = response.json()
+        return dogs
+    })
+    .then(dogs => {
+        dogPic = dogs.message
+        console.log(dogPic)
+    })
+}
+
+getDog(DogAPI)
+
 let displayRecommendation = (data, index) => {
     document.getElementById('question').innerHTML = ``
     document.getElementById('answerdiv').innerHTML = ``
@@ -198,36 +174,13 @@ let displayRecommendation = (data, index) => {
         <img id="poster" alt="movieposter" src="https://www.themoviedb.org/t/p/w1280${data.results[index].poster_path}"
             class="img-thumbnail" />
     </div>
-    <div class="col-md-8">
+    <div id="movieinfo" class="col-md-8">
         <h3 id="movietitle">
             ${data.results[index].title}</h3>
-        <span id="releasedYear" class="badge badge-info">${getReleaseYear(data, index)}</span><span id="movieRating"
-            class="badge badge-info">PG-13</span><span id="movieGenre1"
-            class="badge badge-pill badge-light">Comedy</span><span id="movieRuntime"
-            class="badge badge-pill badge-light">Runtime:</span>
+        <span id="releasedYear" class="badge badge-info">${getReleaseYear(data, index)}</span>
         <p>
             ${data.results[index].overview}
         </p>
-        <button onclick="nextButton(i)">Click me</button>
-        <div id="previousNext" class="btn-group" role="group">
-            <button id="previousMovie" class="btn btn-secondary" onClick="previousButton(data, index)">
-                Previous
-            </button>
-            <button id="nextMovie" class="btn btn-secondary" onClick="nextButton(${data}, ${index})" type="button">
-                Next
-            </button>      
-        </div>
-    </div>`
-}
-
-function nextButton(data, index) {
-    console.log(index)
-    index++
-    console.log(index)
-    displayRecommendation(data, index)
-}
-function previousButton(data, index) {
-    if(index <=0){return}
-    else{  index--
-    }
-}
+    </div>
+    <div id='dogDiv'><img src='${dogPic}' id='dogPic'></div>`
+ }

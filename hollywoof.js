@@ -7,6 +7,8 @@ let userAnswers = [];
 let userGenres = [];
 //sets an empty string to contain dogpic url
 let dogPic = ``;
+
+let shortTime = dayjs().add(2, 'hour')
 //creates object to store userQuestions and answer sets for each part of the quiz
 let userQuestions = {
     1: {
@@ -186,7 +188,7 @@ getDog(DogAPI)
 let displayRecommendation = (data, index) => {
     document.getElementById('question').innerHTML = ``
     document.getElementById('answerdiv').innerHTML = ``
-    document.getElementById(`main`).innerHTML = `<div class="row">
+    document.getElementById(`main`).innerHTML = `<div id="results" class="row">
     <div id="postercard" class="col-md-3">
         <img id="poster" alt="movieposter" src="https://www.themoviedb.org/t/p/w1280${data.results[index].poster_path}"
             class="img-thumbnail" />
@@ -195,9 +197,15 @@ let displayRecommendation = (data, index) => {
         <h3 id="movietitle">
             ${data.results[index].title}</h3>
         <span id="releasedYear" class="badge badge-info">${getReleaseYear(data, index)}</span>
-        <p>
+        <p id="overview">
             ${data.results[index].overview}
         </p>
-    </div>
-    <div id='dogDiv'><img src='${dogPic}' id='dogPic'></div>`
+        <div id='dogDiv'><img src='${dogPic}' id='dogPic'></div>
+    </div>`
+
+    if(userAnswers[0] == `Not a lot`){
+        runtime = document.createElement('dogDiv');
+        document.getElementById('overview').append(runtime);
+        runtime.innerHTML = `<p><br>This movie will be finished by ${shortTime.format(`h:MM`)}</p>`
+    }
  }
